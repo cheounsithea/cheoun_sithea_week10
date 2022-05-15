@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,14 +17,14 @@ use App\Http\Controllers\PostController;
 */
 
 Route::get('/', function () {
+    
     return view('welcome');
 });
 
 Route::prefix('/')->middleware('auth')->group(function () {
-    Route::get('/home', function () {
-        return view('home');
-    });
+    
     Route::resources([
+        'home'=>HomeController::class,
         'category'=>CategoryController::class,
         'post' =>PostController::class
     ]);
