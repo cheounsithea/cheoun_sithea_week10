@@ -15,15 +15,22 @@
         </a>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 link-dark">Home</a></li>
+            <li><a href="{{route('home.index')}}" class="nav-link px-2 link-dark">Home</a></li>
             <li><a href="{{route('category.index')}}" class="nav-link px-2 link-dark">Category</a></li>
             <li><a href="#" class="nav-link px-2 link-secondary">My Post</a></li>
         </ul>
 
         <div class="col-md-3 text-end">
-           
+           @if(Auth::user())
+            <h5>Welcome, {{Auth::user()->name}} <span><a class="btn btn-outline-warning" href="{{ route('logout') }}" role="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">logout</a></span></h5>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                @csrf
+            </form>
+           @else
             <button type="button" class="btn btn-outline-primary me-2">Login</button>
             <button type="button" class="btn btn-primary">Sign-up</button>
+           @endif
+            
         </div>
         
         </header>
@@ -45,8 +52,6 @@
                             <p class="card-text text-muted">Owner</p>
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-bs-target="#staticBackdrop1{{$posts->id}}" data-bs-toggle="modal">Update</button>
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-bs-target="#Del_Modal{{$posts->id}}" data-bs-toggle="modal">Delete</button>
-                        @else
-                            <p class="card-text text-muted">create by: {{$posts->name}}</p>
                         @endif
                         <div class="modal fade" id="Del_Modal{{$posts->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-sm" role="document">
@@ -116,6 +121,7 @@
                         </div>
                     </div>  
                     @endforeach
+                    {{$post->links()}}
                     @else
                             
                         No Post

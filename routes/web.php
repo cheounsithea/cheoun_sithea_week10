@@ -16,15 +16,15 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/', function () {
-    
-    return view('welcome');
-});
+Route::resources([
+    '/'=>HomeController::class,
+    'home'=>HomeController::class,
+]);
 
 Route::prefix('/')->middleware('auth')->group(function () {
     
     Route::resources([
-        'home'=>HomeController::class,
+
         'category'=>CategoryController::class,
         'post' =>PostController::class
     ]);

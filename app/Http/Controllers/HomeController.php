@@ -20,7 +20,7 @@ class HomeController extends Controller
             ->select('post.*', 'category.category', 'users.name')
             ->leftjoin('category', 'category.id', '=', 'post.category_id')
             ->leftjoin('users', 'users.id', '=', 'post.user_id')
-            ->get();
+            ->paginate(10);
         return view('home', compact('post','categorys'));
     }
 

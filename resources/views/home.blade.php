@@ -15,15 +15,21 @@
         </a>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
+            <li><a href="{{route('home.index')}}" class="nav-link px-2 link-secondary">Home</a></li>
             <li><a href="{{route('category.index')}}" class="nav-link px-2 link-dark">Category</a></li>
             <li><a href="{{route('post.index')}}" class="nav-link px-2 link-dark">My Post</a></li>
         </ul>
 
         <div class="col-md-3 text-end">
-           
-            <button type="button" class="btn btn-outline-primary me-2">Login</button>
-            <button type="button" class="btn btn-primary">Sign-up</button>
+            @if(Auth::user())
+                <h5>Welcome, {{Auth::user()->name}} <span><a class="btn btn-outline-warning" href="{{ route('logout') }}" role="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">logout</a></span></h5>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                    @csrf
+                </form>
+            @else
+                <a type="button" href="{{route('login')}}" class="btn btn-outline-primary me-2">Login</a>
+                <a type="button" href="{{route('register')}}" class="btn btn-primary">Sign-up</a>
+            @endif
         </div>
         
         </header>
@@ -41,13 +47,27 @@
                         <h6 class="card-subtitle text-muted">category: {{$posts->category}}</h6>
                         <p class="card-text">{{$posts->post}}</p>
                         <p class="card-text text-muted">create at: {{$posts->created_at}}</p>
-                        @if(Auth::user()->id == $posts->user_id)
-                            <p class="card-text text-muted">Owner</p>
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-bs-target="#staticBackdrop1{{$posts->id}}" data-bs-toggle="modal">Update</button>
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-bs-target="#Del_Modal{{$posts->id}}" data-bs-toggle="modal">Delete</button>
+                        @if(Auth::user())
+                            @if(Auth::user()->id == $posts->user_id)
+                                <p class="card-text text-muted">Owner</p>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-bs-target="#staticBackdrop1{{$posts->id}}" data-bs-toggle="modal">Update</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-bs-target="#Del_Modal{{$posts->id}}" data-bs-toggle="modal">Delete</button>
+                            @endif
+                            @if(!Auth::user()->isadmin)
+                            <p class="card-text text-muted">create by: {{$posts->name}}</p>
+                            @else
+                                <p class="card-text text-muted">create by: {{$posts->name}}</p>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-bs-target="#staticBackdrop1{{$posts->id}}" data-bs-toggle="modal">Update</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-bs-target="#Del_Modal{{$posts->id}}" data-bs-toggle="modal">Delete</button>
+                                
+                            @endif
                         @else
                             <p class="card-text text-muted">create by: {{$posts->name}}</p>
                         @endif
+                        
+
+                        
+                        
                         <div class="modal fade" id="Del_Modal{{$posts->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-sm" role="document">
                                 <div class="modal-content">
@@ -116,6 +136,7 @@
                         </div>
                     </div>  
                     @endforeach
+                    {{$post->links()}}
                     @else
                             
                         No Post

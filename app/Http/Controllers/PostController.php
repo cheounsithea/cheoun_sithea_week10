@@ -22,7 +22,7 @@ class PostController extends Controller
         ->leftjoin('category', 'category.id', '=', 'post.category_id')
         ->leftjoin('users', 'users.id', '=', 'post.user_id')
         ->where('post.user_id','=',Auth::user()->id)
-        ->get();
+        ->paginate(10);
         return view('post',compact('post','categorys'));
     }
 
@@ -54,8 +54,8 @@ class PostController extends Controller
             
         ]);
         $post = PostModel::create($request->all());
-        if($post) return redirect('/post');
-            else return redirect('/post');
+        if($post) return redirect()->back();
+            else return redirect()->back();
     }
 
     /**
