@@ -89,7 +89,10 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user=PostModel::findOrFail($id);
+        $user->update($request->all());
+        
+        return redirect()->back();
     }
 
     /**
@@ -100,6 +103,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        PostModel::destroy($id);
+        return redirect()->back();
     }
 }
