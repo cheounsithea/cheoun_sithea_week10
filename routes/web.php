@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +18,13 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/home', function () {
-    return view('home');
+
+Route::prefix('/')->middleware('auth')->group(function () {
+    Route::get('/home', function () {
+        return view('home');
+    });
+    Route::resources([
+        'category'=>CategoryController::class,
+        'post' =>PostController::class
+    ]);
 });
